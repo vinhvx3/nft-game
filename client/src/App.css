@@ -1,0 +1,20 @@
+
+a {
+    text-decoration: none !important;
+}
+
+.x-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.y-center {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+::-webkit-input-placeholder {
+    text-align: left !important;
+}
