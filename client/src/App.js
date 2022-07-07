@@ -8,7 +8,8 @@ import { AppProvider } from "./context/AppContext";
 import HomeScreen from "./screens/HomeScreen";
 
 import { IconContext } from "react-icons";
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Breadcrumb, Layout } from "antd";
+import Header from "./components/layouts/Header";
 
 function App() {
   return (
@@ -16,22 +17,8 @@ function App() {
       <IconContext.Provider value={{ size: "2em", color: "white" }}>
         <AppProvider>
           <Layout className="layout">
-            <Layout.Header>
-              <div className="logo" />
-              <Menu
-                theme="dark"
-                mode="horizontal"
-                defaultSelectedKeys={["2"]}
-                items={new Array(4).fill(null).map((_, index) => {
-                  const key = index + 1;
-                  return {
-                    key,
-                    label: `nav ${key}`,
-                  };
-                })}
-              />
-            </Layout.Header>
-            <Layout.Content className="site-layout" style={{ marginTop: 64 }}>
+            <Header />
+            <Layout.Content className="site-layout" style={{ marginTop: 10 }}>
               <Breadcrumb style={{ margin: "16px 0" }}>
                 <Breadcrumb.Item>Home</Breadcrumb.Item>
                 <Breadcrumb.Item>List</Breadcrumb.Item>
