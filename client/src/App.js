@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
 
@@ -8,8 +8,9 @@ import { AppProvider } from "./context/AppContext";
 import HomeScreen from "./screens/HomeScreen";
 
 import { IconContext } from "react-icons";
-import { Breadcrumb, Layout } from "antd";
+import { Layout } from "antd";
 import Header from "./components/layouts/Header";
+import MissionScreen from "./screens/MissionScreen";
 
 function App() {
   return (
@@ -18,20 +19,16 @@ function App() {
         <AppProvider>
           <Layout className="layout">
             <Header />
-            <Layout.Content className="site-layout" style={{ marginTop: 10 }}>
-              <Breadcrumb style={{ margin: "16px 0" }}>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
-              </Breadcrumb>
+            <Layout.Content className="site-layout">
               <div className="site-layout-content">
                 <Switch>
+                  <Route path="/mission" component={MissionScreen} />
                   <Route path="/" component={HomeScreen} />
                 </Switch>
               </div>
             </Layout.Content>
             <Layout.Footer style={{ textAlign: "center" }}>
-              Ant Design ©2018 Created by Ant UED
+              NFT Game ©2022 Created by VXV team
             </Layout.Footer>
           </Layout>
         </AppProvider>

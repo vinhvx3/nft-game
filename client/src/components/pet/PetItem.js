@@ -1,25 +1,77 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from "@ant-design/icons";
+import {
+  MedicineBoxOutlined,
+  InfoCircleOutlined,
+  LockOutlined,
+} from "@ant-design/icons";
 import { Avatar, Card, Modal } from "antd";
+import { AppContext } from "../../context/AppContext";
+import date from "date-and-time";
 
-import fireAvatar from "../../static/avatar/Charizard-Mega.png";
-import fireIcon from "../../static/icon/fire.png";
-import { useState } from "react";
+let timer = null;
 
 function PetItem(props) {
-  const { data } = props;
+  const { feed } = useContext(AppContext);
+  const { data, id } = props;
   const [visible, setVisible] = useState(false);
+
+  const [countDown, setCountDown] = useState(0);
+
+  useEffect(() => {
+    const now = new Date();
+
+    if (now.getTime() < data.lastMeal + data.endurance) {
+      timer = setTimeout(() => {
+        setCountDown(
+          date.format(new Date(now.getTime() - data.lastMeal), "HH:mm:ss")
+        );
+      }, 1 * 1000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [data, countDown]);
+
   return (
     <div className="pet-item">
       <Card
         style={{ width: 300 }}
-        cover={<img alt="example" src={fireAvatar} />}
-        actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" onClick={() => setVisible(true)} />]}
+        cover={
+          <div className="thumb">
+            <img
+              alt="example"
+              src={data.avatar}
+              style={{ height: 300, width: "auto" }}
+            />
+            {data.isLock && (
+              <div className="lock">
+                <LockOutlined />
+              </div>
+            )}
+          </div>
+        }
+        actions={[
+          <MedicineBoxOutlined key="feed" onClick={() => feed(id)} />,
+          <InfoCircleOutlined key="info" onClick={() => setVisible(true)} />,
+        ]}
       >
-        <Card.Meta avatar={<Avatar src={fireIcon} />} title="Dragon fire" description="This is the description" />
+        <Card.Meta
+          avatar={<Avatar src={data.icon} />}
+          title={data.name}
+          description={`Level ${data.level}`}
+        />
+        <div className="timeout">{countDown}</div>
       </Card>
-      <Modal title="Dragon fire" centered visible={visible} onOk={() => setVisible(false)} onCancel={() => setVisible(false)} width={1000}>
+      <Modal
+        title="Dragon fire"
+        centered
+        visible={visible}
+        onOk={() => setVisible(false)}
+        onCancel={() => setVisible(false)}
+        width={800}
+      >
         <p>Damage: {data.damage}</p>
         <p>Magic: {data.magic}</p>
         <p>Endurance: {data.endurance}</p>

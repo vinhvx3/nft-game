@@ -1,20 +1,52 @@
 import { Button } from "antd";
 import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import PetItem from "../components/pet/PetItem";
 import { AppContext } from "../context/AppContext";
-import "./HomeScreen.scss";
 
 function HomeScreen(props) {
-  const { login, pets } = useContext(AppContext);
+  const { login, pets, userId } = useContext(AppContext);
+  const history = useHistory();
+
   return (
     <div id="home-screen">
-      <div className="login-area d-flex justify-content-center align-items-center" style={{ width: "100%", minHeight: "300px", background: "#222" }}>
-        <Button onClick={login}>Moralis Login</Button>
+      <div
+        className="poster d-flex justify-content-center align-items-center"
+        style={{
+          width: "100%",
+          minHeight: "300px",
+        }}
+      >
+        <div className="place-holder"></div>
+        {userId ? (
+          <Button
+            size="large"
+            shape="round"
+            type="primary"
+            danger
+            ghost
+            onClick={() => {
+              history.push("/mission");
+            }}
+          >
+            Let's go
+          </Button>
+        ) : (
+          <Button
+            size="large"
+            shape="round"
+            type="primary"
+            ghost
+            onClick={login}
+          >
+            Moralis Login
+          </Button>
+        )}
       </div>
 
-      <div className="list-pet d-flex">
+      <div className="list-pet d-flex justify-content-between">
         {pets.map((item, index) => {
-          return <PetItem data={item} key={index} />;
+          return <PetItem data={item} key={index} id={index} />;
         })}
       </div>
     </div>
