@@ -5,7 +5,7 @@ import PetItem from "../components/pet/PetItem";
 import { AppContext } from "../context/AppContext";
 
 function HomeScreen(props) {
-  const { login, pets, userId } = useContext(AppContext);
+  const { login, pets, userId, exp } = useContext(AppContext);
   const history = useHistory();
 
   return (
@@ -18,6 +18,7 @@ function HomeScreen(props) {
         }}
       >
         <div className="place-holder"></div>
+        <div className="exp">Exp: {exp}</div>
         {userId ? (
           <Button
             size="large"

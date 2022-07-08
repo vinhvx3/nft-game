@@ -5,7 +5,7 @@ import { AppContext } from "../context/AppContext";
 
 function MissionScreen(props) {
   const history = useHistory();
-  const { pets, missions, setPetsMission } = useContext(AppContext);
+  const { pets, missions, setPetsMission, exp } = useContext(AppContext);
 
   const [visible, setVisible] = useState(false);
 
@@ -53,6 +53,7 @@ function MissionScreen(props) {
         }}
       >
         <div className="place-holder"></div>
+        <div className="exp">Exp: {exp}</div>
         <div className="message">
           <div className="chat">
             Chọn một nhiệm vụ phù hợp để hoàn thành và nhận thưởng.

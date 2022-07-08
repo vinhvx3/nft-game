@@ -12,6 +12,7 @@ import { Layout } from "antd";
 import Header from "./components/layouts/Header";
 import MissionScreen from "./screens/MissionScreen";
 import FightScreen from "./screens/FightScreen";
+import DocumentScreen from "./screens/DocumentScreen";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Layout.Content className="site-layout">
               <div className="site-layout-content">
                 <Switch>
+                  <Route path="/document" component={DocumentScreen} />
                   <Route path="/fight/:id" component={FightScreen} />
                   <Route path="/mission" component={MissionScreen} />
                   <Route path="/" component={HomeScreen} />

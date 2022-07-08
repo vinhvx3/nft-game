@@ -91,6 +91,7 @@ export function AppProvider(props) {
 
   const [pets, setPets] = useState([]);
   const [petsMission, setPetsMission] = useState([]);
+  const [exp, setExp] = useState(0);
 
   useEffect(() => {
     Moralis.start({ serverUrl, appId });
@@ -236,6 +237,8 @@ export function AppProvider(props) {
         missions,
         petsMission,
         setPetsMission,
+        exp,
+        setExp,
       }}
     >
       {props.children}

@@ -16,8 +16,45 @@ function Header(props) {
 
   const { userId, logOut } = useContext(AppContext);
 
+  const items = [
+    {
+      label: "Home",
+      key: "home",
+      icon: <HomeOutlined />,
+    },
+    {
+      label: "Missions",
+      key: "missions",
+      icon: <CodeSandboxOutlined />,
+    },
+    {
+      label: "Document",
+      key: "document",
+      icon: <FileTextOutlined />,
+    },
+  ];
+
+  function handleMenu(e) {
+    switch (e.key) {
+      case "home":
+        history.push("/home");
+        break;
+
+      case "missions":
+        history.push("/mission");
+        break;
+
+      case "document":
+        history.push("/document");
+        break;
+
+      default:
+        break;
+    }
+  }
+
   return (
-    <Layout.Header>
+    <Layout.Header id="header">
       <Row>
         <Col span={3}>
           <div className="logo">
@@ -26,29 +63,13 @@ function Header(props) {
         </Col>
 
         <Col span={18}>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["home"]}>
-            <Menu.Item
-              key="home"
-              icon={<HomeOutlined />}
-              onClick={() => history.push("/")}
-            >
-              Home
-            </Menu.Item>
-            <Menu.Item
-              key="missions"
-              icon={<CodeSandboxOutlined />}
-              onClick={() => history.push("/mission")}
-            >
-              Missions
-            </Menu.Item>
-            <Menu.Item
-              key="document"
-              icon={<FileTextOutlined />}
-              onClick={() => history.push("/document")}
-            >
-              Document
-            </Menu.Item>
-          </Menu>
+          <Menu
+            onClick={handleMenu}
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["home"]}
+            items={items}
+          ></Menu>
         </Col>
 
         <Col span={3}>

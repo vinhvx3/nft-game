@@ -5,7 +5,7 @@ import {
   InfoCircleOutlined,
   LockOutlined,
 } from "@ant-design/icons";
-import { Avatar, Card, Modal } from "antd";
+import { Avatar, Card, Modal, Progress, Row, Col } from "antd";
 import { AppContext } from "../../context/AppContext";
 import date from "date-and-time";
 
@@ -70,11 +70,66 @@ function PetItem(props) {
         visible={visible}
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
-        width={800}
+        width={600}
       >
-        <p>Damage: {data.damage}</p>
-        <p>Magic: {data.magic}</p>
-        <p>Endurance: {data.endurance}</p>
+        <div className="px-5">
+          <h5>Level {data.level}</h5>
+          <Row>
+            <Col span={5}>Experience:</Col>
+            <Col span={15}>
+              <Progress
+                percent={data.experience / 5}
+                size="small"
+                showInfo={false}
+                width={100}
+              />
+            </Col>
+            <Col span={4}>
+              <div className="text-center">{data.experience}</div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={5}>Damage:</Col>
+            <Col span={15}>
+              <Progress
+                percent={data.damage / 5}
+                size="small"
+                status="exception"
+                showInfo={false}
+                width={100}
+              />
+            </Col>
+            <Col span={4}>
+              <div className="text-center">{data.damage}</div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={5}>Defend:</Col>
+            <Col span={15}>
+              <Progress
+                percent={data.defend / 5}
+                size="small"
+                status="active"
+                showInfo={false}
+                width={100}
+              />
+            </Col>
+            <Col span={4}>
+              <div className="text-center">{data.defend}</div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={5}>Endurance:</Col>
+            <Col span={4}>
+              <div className="text-center">
+                {date.format(new Date(data.defend), "HH:mm:ss")}s
+              </div>
+            </Col>
+          </Row>
+        </div>
       </Modal>
     </div>
   );

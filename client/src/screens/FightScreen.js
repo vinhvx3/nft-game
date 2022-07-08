@@ -18,7 +18,8 @@ function FightScreen(props) {
   const { id } = useParams();
   const history = useHistory();
 
-  const { checkElement, missions, petsMission, pets } = useContext(AppContext);
+  const { checkElement, missions, petsMission, pets, exp, setExp } =
+    useContext(AppContext);
   const [bgRandom, setBgRandom] = useState(
     Math.floor((Math.random() * 10) % 3)
   );
@@ -102,8 +103,14 @@ function FightScreen(props) {
           if (round < listBot.length - 1) {
             setCrtBot(checkElement({ ...listBot[round + 1], blood: 100 }));
             setRound(round + 1);
-            changeSide();
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            useBotSkill0();
           } else {
+            setExp(
+              listBot.reduce((total, item) => {
+                return total + item.level * 25;
+              }, 0)
+            );
             setWinner(true);
             setModalOver(true);
           }
@@ -114,6 +121,7 @@ function FightScreen(props) {
           setLockPet(false);
         } else {
           clearInterval(timerCountDown);
+          setSide(-1);
 
           let list = listPet;
 
@@ -153,18 +161,18 @@ function FightScreen(props) {
     if (!crtPet || !crtPet.blood) return;
 
     setVisible(false);
-    setTimeout(() => {
+
+    if (listPet.length === petsMission.length) {
       setPetSkill1(TIME_SKILL_1);
       setPetSkill2(TIME_SKILL_2);
       setBotSkill1(TIME_SKILL_1);
       setBotSkill2(TIME_SKILL_2);
+    }
 
-      setSide(0);
-    }, 3000);
+    setSide(0);
   }
 
   function caculateDamge(damage, from, to) {
-    console.log(from, to);
     if (
       (from === 1 && to === 3) ||
       (from === 3 && to === 2) ||
@@ -184,7 +192,7 @@ function FightScreen(props) {
         crtPet.element
       );
       let _pet = crtPet;
-      _pet.blood -= dmg - _pet.defend;
+      _pet.blood -= Math.round((dmg * 100) / (_pet.defend + 300));
       setCrtPet(_pet);
     } else {
       let dmg = caculateDamge(
@@ -193,7 +201,7 @@ function FightScreen(props) {
         crtBot.element
       );
       let _bot = crtBot;
-      _bot.blood -= dmg - _bot.defend + 5;
+      _bot.blood -= Math.round((dmg * 100) / (_bot.defend + 300));
       setCrtBot(_bot);
     }
   }
@@ -353,7 +361,7 @@ function FightScreen(props) {
           showInfo={false}
           strokeWidth={30}
         />
-        <div className="round">Round {round}</div>
+        <div className="round">Round {round + 1}</div>
 
         <Progress
           className="pgr-right"
@@ -472,7 +480,7 @@ function FightScreen(props) {
         {winner ? (
           <div className="winner text-center">
             <h2 style={{ color: "red" }}>Winner</h2>
-            <h4> + 400epx</h4>
+            <h4> + {exp}epx</h4>
           </div>
         ) : (
           <div className="lose text-center">
