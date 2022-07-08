@@ -3,28 +3,19 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
-import mission1 from "../static/image/mission-1.jpg";
-
-const missions = [
-  {
-    name: "Tân thủ",
-    description: "1 round",
-    poster: mission1,
-    maxChoose: 2,
-  },
-];
-
 function MissionScreen(props) {
   const history = useHistory();
-  const { pets } = useContext(AppContext);
+  const { pets, missions, setPetsMission } = useContext(AppContext);
 
   const [visible, setVisible] = useState(false);
 
   const [maxChoose, setMaxChoose] = useState(0);
   const [arrChoose, setArrChoose] = useState([]);
+  const [missionIndex, setMissionIndex] = useState();
 
   function openModalChoose(index) {
     setArrChoose([]);
+    setMissionIndex(index);
     setMaxChoose(missions[index].maxChoose);
     setVisible(true);
   }
@@ -44,8 +35,12 @@ function MissionScreen(props) {
   }
 
   function goFight() {
+    if (!arrChoose.length) {
+      return;
+    }
     setVisible(false);
-    history.push("/fight");
+    setPetsMission(arrChoose);
+    history.push("/fight/" + missionIndex);
   }
 
   return (
@@ -75,7 +70,10 @@ function MissionScreen(props) {
               cover={<img alt={item.name} src={item.poster} />}
               onClick={() => openModalChoose(index)}
             >
-              <Card.Meta title={item.name} description={item.description} />
+              <Card.Meta
+                title={item.name}
+                description={item.round + " round."}
+              />
             </Card>
           );
         })}

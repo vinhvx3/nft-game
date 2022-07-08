@@ -154,3 +154,163 @@ a {
         }
     }
 }
+
+#fight-screen {
+    width: 100%;
+    height: 90vh;
+
+    .background {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+    
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .place-holder {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0 0 0 / 50%);
+        }
+        
+        
+
+        &.bg-0 {
+            background-image: url(./static/image/arena1.png);
+        }
+        &.bg-1 {
+            background-image: url(./static/image/arena2.png);
+        }
+        &.bg-2 {
+            background-image: url(./static/image/arena3.jpg);
+        }
+    }
+
+    .blood-progress {
+        padding: 30px 15%;
+        gap: 50px;
+        position: relative;
+
+        .round {
+            padding: 10px 40px;
+            background-color: rgb(0 0 0 / 55%);
+            color: #fff;
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 10px;
+
+
+        }
+
+        .pgr-right {
+            &>div {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .skills {
+        width: 100px;
+        height: 300px;
+        position: absolute;
+        left: 5%;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .skill {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            background-color: orange;
+            overflow: hidden;
+            
+
+            img {
+                width: 70%;
+                height: 70%;
+                position: absolute;
+                top: 15%;
+                left: 15%;
+                cursor: pointer;
+            }
+
+            .ant-progress {
+                
+                border-radius: 50%;
+                overflow: hidden;
+
+                & > div {
+                    background-color: rgb(0 0 0 / 55%);
+                }
+            }
+        }
+    }
+
+    .fighting {
+        width: 1000px;
+        height: 400px;
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-between;
+
+        .side {
+            img {
+                height: 250px;
+            }
+
+            &.bot {
+                
+            }
+        }
+
+        .reverse {
+            transform: scaleX(-1); 
+        }
+
+    }
+}
+
+.animation-left-0 {
+    position: relative;
+    animation-name: left-0;
+    animation-duration: 2s;
+}
+
+@keyframes left-0 {
+    0%   {left:0px; top:0px;}
+    40%  {left:300px; top:-300px;}
+    66%  {left:500px; top: -200px;}
+    100% {left:0px; top:0px;}
+}
+
+.hurt {
+    width: 100px;
+    height: 100px;
+    background: url(./static/image/hurt.png);
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: -100px;
+    animation-name: scale;
+    animation-duration: 2s;
+
+    &.hurt-right {
+        right: 100px;
+    }
+}
+
+@keyframes scale {
+    0%   {transform: scale(1.5);}
+    40%  {transform: scale(1);}
+    66%  {transform: scale(1.5);}
+    100% {transform: scale(1);}
+}

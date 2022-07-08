@@ -1,0 +1,463 @@
+#fight-screen {
+    width: 100%;
+    height: 90vh;
+
+    .background {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+    
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .place-holder {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0 0 0 / 50%);
+        }
+        
+        
+
+        &.bg-0 {
+            background-image: url(../static/image/arena1.png);
+        }
+        &.bg-1 {
+            background-image: url(../static/image/arena2.png);
+        }
+        &.bg-2 {
+            background-image: url(../static/image/arena3.jpg);
+        }
+    }
+
+    .blood-progress {
+        padding: 30px 15%;
+        gap: 50px;
+        position: relative;
+
+        .level {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .round {
+            padding: 10px 40px;
+            background-color: rgb(0 0 0 / 55%);
+            color: #fff;
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 10px;
+
+
+        }
+
+        .pgr-right {
+            &>div {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .skills {
+        width: 100px;
+        height: 300px;
+        position: absolute;
+        left: 5%;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .skill {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            background-color: orange;
+            overflow: hidden;
+            
+
+            img {
+                width: 70%;
+                height: 70%;
+                position: absolute;
+                top: 15%;
+                left: 15%;
+                cursor: pointer;
+            }
+
+            .ant-progress {
+                
+                border-radius: 50%;
+                overflow: hidden;
+
+                & > div {
+                    background-color: rgb(0 0 0 / 55%);
+                }
+            }
+        }
+    }
+
+    .fighting {
+        width: 1000px;
+        height: 400px;
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-between;
+
+        .side {
+            img {
+                height: 250px;
+            }
+
+        }
+
+        .reverse {
+            transform: scaleX(-1); 
+        }
+
+        .timer {
+            width: 80px;
+            height: 80px;
+            background-color: #fff;
+            color: #000;
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 50%;
+            padding-top: 3px;
+
+            position: absolute;
+            top: -350px;
+            
+            &.timer-left {
+                left: 0;
+            }
+            &.timer-right {
+                right: 0;
+            }
+        }
+
+    }
+}
+
+// Left Animation
+.hurt {
+    width: 100px;
+    height: 100px;
+    background: url(../static/image/hurt.png);
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: -100px;
+    animation-name: left-scale;
+    animation-duration: 2s;
+
+    &.hurt-left {
+        left: 100px;
+    }
+}
+
+@keyframes left-scale {
+    0%   {transform: scale(1.5);}
+    40%  {transform: scale(1);}
+    66%  {transform: scale(1.5);}
+    100% {transform: scale(1);}
+}
+
+.animation-left-0 {
+    position: relative;
+    animation-name: left-0;
+    animation-duration: 2s;
+}
+
+@keyframes left-0 {
+    0%   {left:0px; top:0px;}
+    40%  {left:300px; top:-300px;}
+    66%  {left:500px; top: -200px;}
+    100% {left:0px; top:0px;}
+}
+
+
+
+.animation-left-1 {
+    position: relative;
+    .power-fight {
+        display: block !important;
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        left: 280px;
+        background-color: red;
+        border-radius: 30px;
+        box-shadow: 0 0 4px 10px rgba(red, 0.5);
+        z-index: 99;
+
+        animation-name: left-1;
+        animation-duration: 2s;
+    }
+}
+
+@keyframes left-1 {
+    0%   {width: 60px;}
+    40%  {width: 60px;}
+    50%  {width: 500px;}
+    80%  {width: 500px; transform: scaleY(1.5);}
+    90%  {width: 500px;}
+    100% {width: 60px;}
+}
+
+.animation-left-2 {
+    position: relative;
+    .energy-ball {
+        display: block !important;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        left: 500px;
+        top: -250px;
+        background-color: red;
+        border-radius: 30px;
+        box-shadow: 0 0 4px 2px rgba(red, 0.5);
+        z-index: 99;
+
+        animation-name: left-2;
+        animation-duration: 2s;
+    }
+}
+
+@keyframes left-2 {
+    0%   {transform: scale(1);}
+    50%  {transform: scale(20);}
+    60%  {transform: scale(20); left: 500px; top: -250px}
+    80%  {transform: scale(20); left: 800px; top: 150px; opacity: 1;}
+    100% {transform: scale(50); left: 800px; top: 150px; opacity: 0;}
+}
+
+
+// Right Animation
+.hurt {
+    width: 100px;
+    height: 100px;
+    background: url(../static/image/hurt.png);
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: -100px;
+    animation-name: left-scale;
+    animation-duration: 2s;
+
+    &.hurt-right {
+        right: 100px;
+    }
+}
+
+@keyframes left-scale {
+    0%   {transform: scale(1.5);}
+    40%  {transform: scale(1);}
+    66%  {transform: scale(1.5);}
+    100% {transform: scale(1);}
+}
+
+.animation-right-0 {
+    position: relative;
+    animation-name: right-0;
+    animation-duration: 2s;
+}
+
+@keyframes right-0 {
+    0%   {right:0px; top:0px;}
+    40%  {right:300px; top:-300px;}
+    66%  {right:500px; top: -200px;}
+    100% {right:0px; top:0px;}
+}
+
+
+
+.animation-right-1 {
+    position: relative;
+    .power-fight {
+        display: block !important;
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        right: 280px;
+        background-color: red;
+        border-radius: 30px;
+        box-shadow: 0 0 4px 10px rgba(red, 0.5);
+        z-index: 99;
+
+        animation-name: right-1;
+        animation-duration: 2s;
+    }
+}
+
+@keyframes right-1 {
+    0%   {width: 60px;}
+    40%  {width: 60px;}
+    50%  {width: 500px;}
+    80%  {width: 500px; transform: scaleY(1.5);}
+    90%  {width: 500px;}
+    100% {width: 60px;}
+}
+
+.animation-right-2 {
+    position: relative;
+    .energy-ball {
+        display: block !important;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        right: 500px;
+        top: -250px;
+        background-color: red;
+        border-radius: 30px;
+        box-shadow: 0 0 4px 2px rgba(red, 0.5);
+        z-index: 99;
+
+        animation-name: right-2;
+        animation-duration: 2s;
+    }
+}
+
+@keyframes right-2 {
+    0%   {transform: scale(1);}
+    50%  {transform: scale(20);}
+    60%  {transform: scale(20); right: 500px; top: -250px}
+    80%  {transform: scale(20); right: 800px; top: 150px; opacity: 1;}
+    100% {transform: scale(50); right: 800px; top: 150px; opacity: 0;}
+}
+
+.blue {
+    .power-fight {
+        background-color: blue !important;
+        box-shadow: 0 0 4px 10px rgba(blue, 0.5) !important;
+    }
+
+    .energy-ball {
+        background-color: blue !important;
+        box-shadow: 0 0 4px 2px rgba(blue, 0.5) !important;
+    }
+}
+
+.yellow {
+    .power-fight {
+        background-color: yellow !important;
+        box-shadow: 0 0 4px 10px rgba(yellow, 0.5) !important;
+    }
+
+    .energy-ball {
+        background-color: yellow !important;
+        box-shadow: 0 0 4px 2px rgba(yellow, 0.5) !important;
+    }
+}
+
+.power-fight, .energy-ball {
+    display: none;
+}
+
+
+#count-down {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+
+    * , *::before, *::after {
+        padding: 0;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+      
+      body {
+        background-color: #777;
+        height: 100vh;
+        background-image:
+          linear-gradient(black, transparent 10%, transparent calc(50% - 1px), #aaa calc(50% - 1px), #aaa calc(50% + 1px), transparent calc(50% + 1px), transparent 90%, black),
+          linear-gradient(90deg, black, transparent 10%, transparent calc(50% - 1px), #aaa calc(50% - 1px), #aaa calc(50% + 1px), transparent calc(50% + 1px), transparent 90%, black);
+      }
+      
+      .cont {
+        width: 250px;
+        height: 250px;
+        position: fixed;
+        text-align: center;
+        font-weight: bold;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 2px solid #aaa;
+        border-radius: 50%;
+        overflow: hidden;
+        
+        &::after {
+          content: '';
+          width: 200px;
+          height: 200px;
+          position: absolute;
+          top: 23px;
+          left: 23px;
+          border: 1px solid #aaa;
+          border-radius: 50%;
+          background: #777;
+          background-image:
+            linear-gradient(transparent calc(50% - 1px), #aaa calc(50% - 1px), #aaa calc(50% + 1px), transparent calc(50% + 1px)),
+            linear-gradient(90deg, transparent calc(50% - 1px), #aaa calc(50% - 1px), #aaa calc(50% + 1px), transparent calc(50% + 1px));
+      
+        }  
+      }
+      
+      .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 125px;
+        height: 100px;
+        transform-origin: 0 0;
+        background-image: linear-gradient(black, transparent);
+        animation: spin 1s infinite linear;
+        
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(-360deg); }
+        }
+      }
+      
+      .number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        transform: translate(-50%, -50%);
+        width: 250px;
+        height: 250px;
+        
+        &::after {
+          content: '';
+          width: 250px;
+          height: 250px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          font-size: 150px;
+          line-height: 250px;
+          animation: count 4s steps(3, start);
+      
+          @keyframes count {
+            0% { content: ''; }
+            25% { content: '3'; }
+            50% { content: '2'; }
+            75% { content: '1'; }
+            100% { content: '0'; }
+          }
+        }
+      }
+      
+}

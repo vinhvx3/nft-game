@@ -80,6 +80,8 @@ contract Token is ERC721, Ownable {
             if (pet.experience >= 100 * pet.level) {
                 pet.experience -= 100 * pet.level;
                 pet.level++;
+                pet.damage = 100 + pet.level * 20;
+                pet.defend = 100 + pet.level * 10;
             } else {
                 break;
             }
@@ -88,9 +90,7 @@ contract Token is ERC721, Ownable {
 
     function feed(uint256 tokenId) public {
         Pet storage pet = _tokenDetails[tokenId];
-        require(
-            pet.isLock == 0 && (pet.lastMeal + pet.endurance > block.timestamp)
-        );
+        require(pet.isLock == 0);
         pet.lastMeal = block.timestamp;
     }
 

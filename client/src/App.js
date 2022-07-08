@@ -11,6 +11,7 @@ import { IconContext } from "react-icons";
 import { Layout } from "antd";
 import Header from "./components/layouts/Header";
 import MissionScreen from "./screens/MissionScreen";
+import FightScreen from "./screens/FightScreen";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Layout.Content className="site-layout">
               <div className="site-layout-content">
                 <Switch>
+                  <Route path="/fight/:id" component={FightScreen} />
                   <Route path="/mission" component={MissionScreen} />
                   <Route path="/" component={HomeScreen} />
                 </Switch>

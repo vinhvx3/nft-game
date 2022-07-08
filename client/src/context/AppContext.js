@@ -5,22 +5,92 @@ import Web3 from "web3/dist/web3.min.js";
 import Abi from "../abi/Token.json";
 
 import fireAvatar from "../static/image/Charizard.png";
+import fireAvatarFight from "../static/image/Charizard-fighting.png";
 import fireIcon from "../static/icon/fire.png";
 import waterAvatar from "../static/image/Squirtle.png";
+import waterAvatarFight from "../static/image/Squirtle-fighting.png";
 import waterIcon from "../static/icon/water.png";
 import electricAvatar from "../static/image/Pikachu.png";
+import electricAvatarFight from "../static/image/Pikachu-fighting.png";
 import electricIcon from "../static/icon/electric.png";
+import mission1 from "../static/image/mission-1.jpg";
+import mission2 from "../static/image/mission-2.jpg";
+import mission3 from "../static/image/mission-3.png";
 
 export const AppContext = React.createContext();
 
 const serverUrl = "https://trhllvlqhayr.usemoralis.com:2053/server";
 const appId = "bRh7rk7zdJN0buRIJcecSExEjeL3J3o3FHQz3BRG";
-const CONTRACT_ADDRESS = "0xFF8BFFAea928F76ED87A71c7e59964f900a38aB1";
+const CONTRACT_ADDRESS = "0x99AF237f62aa50Ae33660822Cc578B94D4a8c9cF";
+
+const missions = [
+  {
+    name: "Tân thủ",
+    round: 1,
+    poster: mission1,
+    maxChoose: 1,
+    bots: [
+      {
+        element: 2,
+        level: 1,
+        damage: 100,
+        defend: 100,
+      },
+    ],
+  },
+  {
+    name: "Trung cấp",
+    round: 2,
+    poster: mission2,
+    maxChoose: 2,
+    bots: [
+      {
+        element: 1,
+        level: 2,
+        damage: 100 + 20,
+        defend: 100 + 10,
+      },
+      {
+        element: 3,
+        level: 3,
+        damage: 100 + 2 * 20,
+        defend: 100 + 2 * 10,
+      },
+    ],
+  },
+  {
+    name: "Thông thạo",
+    round: 3,
+    poster: mission3,
+    maxChoose: 3,
+    bots: [
+      {
+        element: 2,
+        level: 3,
+        damage: 100 + 2 * 20,
+        defend: 100 + 2 * 10,
+      },
+      {
+        element: 3,
+        level: 4,
+        damage: 100 + 3 * 20,
+        defend: 100 + 3 * 10,
+      },
+      {
+        element: 1,
+        level: 5,
+        damage: 100 + 4 * 20,
+        defend: 100 + 4 * 10,
+      },
+    ],
+  },
+];
 
 export function AppProvider(props) {
   const [userId, setUserId] = useState(localStorage.getItem("x-user-id"));
 
   const [pets, setPets] = useState([]);
+  const [petsMission, setPetsMission] = useState([]);
 
   useEffect(() => {
     Moralis.start({ serverUrl, appId });
@@ -79,14 +149,14 @@ export function AppProvider(props) {
     let abi = getAbi();
     const contract = new web3Js.eth.Contract(abi, CONTRACT_ADDRESS);
     const ethAddress = window.ethereum.selectedAddress;
-    // contract.methods
-    //   .feed(id)
-    //   .send({ from: ethAddress })
-    //   .on("receipt", () => {
-    //     console.log("Feed ---");
-    //   });
+    contract.methods
+      .feed(id)
+      .send({ from: ethAddress })
+      .on("receipt", () => {
+        console.log("Feed ---");
+      });
 
-    await contract.methods.feed(id).call({ from: ethAddress });
+    // await contract.methods.feed(id).call({ from: ethAddress });
 
     // let pet = await contract.methods
     //   .getTokenDetails(id)
@@ -107,6 +177,7 @@ export function AppProvider(props) {
       isLock: Number(item.isLock),
       lastMeal: Number(item.lastMeal),
       level: Number(item.level),
+      blood: Number(item.blood),
     };
     switch (result.element) {
       case 1:
@@ -115,6 +186,9 @@ export function AppProvider(props) {
           name: "Fire Dragon",
           avatar: fireAvatar,
           icon: fireIcon,
+          avatarFight: fireAvatarFight,
+          reverse: true,
+          class: "red",
         };
         break;
 
@@ -124,6 +198,9 @@ export function AppProvider(props) {
           name: "Water Turtle",
           avatar: waterAvatar,
           icon: waterIcon,
+          avatarFight: waterAvatarFight,
+          reverse: false,
+          class: "blue",
         };
         break;
 
@@ -133,6 +210,9 @@ export function AppProvider(props) {
           name: "Electric Mouse",
           avatar: electricAvatar,
           icon: electricIcon,
+          avatarFight: electricAvatarFight,
+          reverse: true,
+          class: "yellow",
         };
         break;
 
@@ -152,6 +232,10 @@ export function AppProvider(props) {
         logOut,
         pets,
         feed,
+        checkElement,
+        missions,
+        petsMission,
+        setPetsMission,
       }}
     >
       {props.children}
