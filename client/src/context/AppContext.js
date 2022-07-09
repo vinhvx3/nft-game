@@ -21,7 +21,8 @@ export const AppContext = React.createContext();
 
 const serverUrl = "https://trhllvlqhayr.usemoralis.com:2053/server";
 const appId = "bRh7rk7zdJN0buRIJcecSExEjeL3J3o3FHQz3BRG";
-const CONTRACT_ADDRESS = "0x99AF237f62aa50Ae33660822Cc578B94D4a8c9cF";
+
+const CONTRACT_ADDRESS = "0xC939EEdBe38520B1Cfa20fBB8B4aa904D7A894C6";
 
 const missions = [
   {
@@ -145,6 +146,19 @@ export function AppProvider(props) {
     return Abi.abi;
   }
 
+  async function unLock(id) {
+    const web3Js = new Web3(Moralis.provider);
+    let abi = getAbi();
+    const contract = new web3Js.eth.Contract(abi, CONTRACT_ADDRESS);
+    const ethAddress = window.ethereum.selectedAddress;
+    contract.methods
+      .unLock(id)
+      .send({ from: ethAddress })
+      .on("receipt", () => {
+        updateNewPet(id, contract, ethAddress);
+      });
+  }
+
   async function feed(id) {
     const web3Js = new Web3(Moralis.provider);
     let abi = getAbi();
@@ -154,18 +168,32 @@ export function AppProvider(props) {
       .feed(id)
       .send({ from: ethAddress })
       .on("receipt", () => {
-        console.log("Feed ---");
+        updateNewPet(id, contract, ethAddress);
       });
+  }
 
-    // await contract.methods.feed(id).call({ from: ethAddress });
+  async function receiveExperience(id, _exp) {
+    const web3Js = new Web3(Moralis.provider);
+    let abi = getAbi();
+    const contract = new web3Js.eth.Contract(abi, CONTRACT_ADDRESS);
+    const ethAddress = window.ethereum.selectedAddress;
+    await contract.methods
+      .receiveExperience(id, _exp)
+      .send({ from: ethAddress })
+      .on("receipt", () => {
+        setExp(exp - _exp);
+        updateNewPet(id, contract, ethAddress);
+      });
+  }
 
-    // let pet = await contract.methods
-    //   .getTokenDetails(id)
-    //   .call({ from: ethAddress });
-    // console.log(pet);
-    // let arr = [...pets];
-    // arr[id] = pet;
-    // setPets(arr);
+  async function updateNewPet(id, contract, ethAddress) {
+    let _pet = await contract.methods
+      .getTokenDetails(id)
+      .call({ from: ethAddress });
+
+    let arr = [...pets];
+    arr[id] = checkElement(_pet);
+    setPets(arr);
   }
 
   function checkElement(item) {
@@ -173,10 +201,10 @@ export function AppProvider(props) {
       damage: Number(item.damage),
       defend: Number(item.defend),
       element: Number(item.element),
-      endurance: Number(item.endurance),
+      endurance: item.name ? item.endurance : Number(item.endurance) * 1000,
       experience: Number(item.experience),
       isLock: Number(item.isLock),
-      lastMeal: Number(item.lastMeal),
+      lastMeal: item.name ? item.lastMeal : Number(item.lastMeal) * 1000,
       level: Number(item.level),
       blood: Number(item.blood),
     };
@@ -232,7 +260,9 @@ export function AppProvider(props) {
         login,
         logOut,
         pets,
+        unLock,
         feed,
+        receiveExperience,
         checkElement,
         missions,
         petsMission,

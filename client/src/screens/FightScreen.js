@@ -53,6 +53,8 @@ function FightScreen(props) {
   const [modalOver, setModalOver] = useState(false);
   const [winner, setWinner] = useState(false);
 
+  const [expPlus, setExpPlus] = useState(0);
+
   useEffect(() => {
     setListPet(
       petsMission.map((i) => {
@@ -62,12 +64,14 @@ function FightScreen(props) {
     setListBot(missions[id].bots);
     setCrtBot(checkElement({ ...missions[id].bots[0], blood: 100 }));
     setSpin(true);
+    console.log("Game start");
 
     setTimeout(() => {
       setSpin(false);
       setVisible(true);
     }, 3000);
-  }, [missions, petsMission, pets, id, checkElement]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     if (side >= 0) {
@@ -103,14 +107,17 @@ function FightScreen(props) {
           if (round < listBot.length - 1) {
             setCrtBot(checkElement({ ...listBot[round + 1], blood: 100 }));
             setRound(round + 1);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            useBotSkill0();
+
+            setTimeout(() => {
+              // eslint-disable-next-line react-hooks/rules-of-hooks
+              useBotSkill0();
+            }, 2000);
           } else {
-            setExp(
-              listBot.reduce((total, item) => {
-                return total + item.level * 25;
-              }, 0)
-            );
+            let _exp = listBot.reduce((total, item) => {
+              return total + item.level * 25;
+            }, 0);
+            setExpPlus(_exp);
+            setExp(exp + _exp);
             setWinner(true);
             setModalOver(true);
           }
@@ -480,7 +487,7 @@ function FightScreen(props) {
         {winner ? (
           <div className="winner text-center">
             <h2 style={{ color: "red" }}>Winner</h2>
-            <h4> + {exp}epx</h4>
+            <h4> + {expPlus}epx</h4>
           </div>
         ) : (
           <div className="lose text-center">

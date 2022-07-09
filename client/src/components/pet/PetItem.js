@@ -4,56 +4,126 @@ import {
   MedicineBoxOutlined,
   InfoCircleOutlined,
   LockOutlined,
+  UpCircleOutlined,
 } from "@ant-design/icons";
-import { Avatar, Card, Modal, Progress, Row, Col } from "antd";
+import {
+  Avatar,
+  Card,
+  Modal,
+  Progress,
+  Row,
+  Col,
+  Form,
+  Input,
+  Button,
+} from "antd";
 import { AppContext } from "../../context/AppContext";
 import date from "date-and-time";
 
-let timer = null;
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
 
 function PetItem(props) {
-  const { feed } = useContext(AppContext);
+  const { feed, unLock, exp, receiveExperience } = useContext(AppContext);
   const { data, id } = props;
   const [visible, setVisible] = useState(false);
 
   const [countDown, setCountDown] = useState(0);
 
+  const [modalUp, setModalUp] = useState(false);
+
+  let formRef = React.createRef();
+
   useEffect(() => {
-    const now = new Date();
+    if (data.isLock) return;
+    console.log(data);
 
-    if (now.getTime() < data.lastMeal + data.endurance) {
-      timer = setTimeout(() => {
-        setCountDown(
-          date.format(new Date(now.getTime() - data.lastMeal), "HH:mm:ss")
-        );
-      }, 1 * 1000);
+    let timer = setInterval(() => {
+      const now = new Date().getTime();
+
+      if (data.lastMeal + data.endurance > now) {
+        setCountDown(data.lastMeal + data.endurance - now);
+      } else {
+        setCountDown(0);
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [data]);
+
+  function pad(num) {
+    return ("0" + num).slice(-2);
+  }
+  function hhmmss(secs) {
+    var minutes = Math.floor(secs / 60);
+    secs = secs % 60;
+    var hours = Math.floor(minutes / 60);
+    minutes = minutes % 60;
+    return `${pad(hours)}:${pad(minutes)}`;
+    // return pad(hours)+":"+pad(minutes)+":"+pad(secs); for old browsers
+  }
+
+  async function onFinish(e) {
+    if (e.exp) {
+      await receiveExperience(id, e.exp);
+      setModalUp(false);
     }
+  }
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [data, countDown]);
+  function onFill() {
+    formRef.current.setFieldsValue({
+      exp: exp,
+    });
+  }
+
+  function onFeed() {
+    if (!data.isLock) {
+      feed(id);
+    }
+  }
+
+  function onLevelUp() {
+    if (!data.isLock) {
+      setModalUp(true);
+    }
+  }
 
   return (
     <div className="pet-item">
       <Card
         style={{ width: 300 }}
         cover={
-          <div className="thumb">
+          <div className="thumb py-4">
             <img
               alt="example"
               src={data.avatar}
-              style={{ height: 300, width: "auto" }}
+              style={{ height: 200, width: "auto" }}
             />
-            {data.isLock && (
+            {data.isLock ? (
               <div className="lock">
-                <LockOutlined />
+                <LockOutlined onClick={() => unLock(id)} />
               </div>
+            ) : (
+              ""
             )}
           </div>
         }
         actions={[
-          <MedicineBoxOutlined key="feed" onClick={() => feed(id)} />,
+          <MedicineBoxOutlined key="feed" onClick={onFeed} />,
+          <UpCircleOutlined key="up" onClick={onLevelUp} />,
           <InfoCircleOutlined key="info" onClick={() => setVisible(true)} />,
         ]}
       >
@@ -62,10 +132,20 @@ function PetItem(props) {
           title={data.name}
           description={`Level ${data.level}`}
         />
-        <div className="timeout">{countDown}</div>
+
+        <div className="timeout mt-3 d-flex justify-content-center">
+          <Progress
+            type="circle"
+            percent={Math.round((countDown / data.endurance) * 100)}
+            status="exception"
+            format={(percent) => hhmmss(Math.round(countDown / 1000))}
+            width={90}
+            strokeWidth={8}
+          />
+        </div>
       </Card>
       <Modal
-        title="Dragon fire"
+        title={data.name}
         centered
         visible={visible}
         onOk={() => setVisible(false)}
@@ -111,7 +191,7 @@ function PetItem(props) {
               <Progress
                 percent={data.defend / 5}
                 size="small"
-                status="active"
+                status="success"
                 showInfo={false}
                 width={100}
               />
@@ -123,13 +203,47 @@ function PetItem(props) {
 
           <Row>
             <Col span={5}>Endurance:</Col>
-            <Col span={4}>
-              <div className="text-center">
-                {date.format(new Date(data.defend), "HH:mm:ss")}s
+            <Col span={10}>
+              <div>{date.format(new Date(data.defend), "HH:mm:ss")}s</div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={5}>Last meal:</Col>
+            <Col span={10}>
+              <div>
+                {date.format(new Date(data.lastMeal), "dd/MM/YYYY HH:mm:ss")}s
               </div>
             </Col>
           </Row>
         </div>
+      </Modal>
+
+      <Modal
+        title="Level Up"
+        visible={modalUp}
+        onOk={() => setModalUp(false)}
+        onCancel={() => setModalUp(false)}
+        footer={[
+          <Button key="ok" onClick={() => setModalUp(false)}>
+            OK
+          </Button>,
+        ]}
+      >
+        <Form {...layout} ref={formRef} name="control-ref" onFinish={onFinish}>
+          <p>Max exp: {exp}</p>
+          <Form.Item name="exp" label="Exp" rules={[{ required: true }]}>
+            <Input type="number" min={0} max={exp} />
+          </Form.Item>
+          <Form.Item {...tailLayout}>
+            <Button type="link" htmlType="button" onClick={onFill}>
+              Max exp
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );

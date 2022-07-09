@@ -88,9 +88,14 @@ function MissionScreen(props) {
         onCancel={() => setVisible(false)}
         width={1000}
       >
-        <div className="d-flex justify-content-between px-5">
+        <div className="d-flex justify-content-around px-5">
           {pets
-            .filter((i) => i.isLock === 1)
+            .filter((i) => {
+              const date = new Date();
+              return (
+                i.isLock === 0 && date.getTime() < i.lastMeal + i.endurance
+              );
+            })
             .map((item, index) => {
               return (
                 <div

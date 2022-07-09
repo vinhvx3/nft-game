@@ -91,6 +91,12 @@ contract Token is ERC721, Ownable {
     function feed(uint256 tokenId) public {
         Pet storage pet = _tokenDetails[tokenId];
         require(pet.isLock == 0);
+
+        if (block.timestamp < pet.lastMeal + pet.endurance) {
+            uint256 _exp = (block.timestamp - pet.lastMeal) / 60;
+            this.receiveExperience(tokenId, _exp);
+        }
+
         pet.lastMeal = block.timestamp;
     }
 

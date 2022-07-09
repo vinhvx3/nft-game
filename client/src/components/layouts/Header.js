@@ -37,7 +37,7 @@ function Header(props) {
   function handleMenu(e) {
     switch (e.key) {
       case "home":
-        history.push("/home");
+        history.push("/");
         break;
 
       case "missions":
