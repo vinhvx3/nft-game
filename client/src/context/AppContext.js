@@ -9,6 +9,7 @@ import fireAvatarFight from "../static/image/Charizard-fighting.png";
 import fireIcon from "../static/icon/fire.png";
 import waterAvatar from "../static/image/Squirtle.png";
 import waterAvatarFight from "../static/image/Squirtle-fighting.png";
+import waterAvatarFight2 from "../static/image/Squirtle2-fighting.png";
 import waterIcon from "../static/icon/water.png";
 import electricAvatar from "../static/image/Pikachu.png";
 import electricAvatarFight from "../static/image/Pikachu-fighting.png";
@@ -16,13 +17,15 @@ import electricIcon from "../static/icon/electric.png";
 import mission1 from "../static/image/mission-1.jpg";
 import mission2 from "../static/image/mission-2.jpg";
 import mission3 from "../static/image/mission-3.png";
+import mission4 from "../static/image/mission-4.jpg";
+import mission5 from "../static/image/mission-5.jpeg";
 
 export const AppContext = React.createContext();
 
 const serverUrl = "https://trhllvlqhayr.usemoralis.com:2053/server";
 const appId = "bRh7rk7zdJN0buRIJcecSExEjeL3J3o3FHQz3BRG";
 
-const CONTRACT_ADDRESS = "0xC939EEdBe38520B1Cfa20fBB8B4aa904D7A894C6";
+const CONTRACT_ADDRESS = "0x93d48fF651c845b4DF1A86b3896B93671E195FeF";
 
 const missions = [
   {
@@ -82,6 +85,48 @@ const missions = [
         level: 5,
         damage: 100 + 4 * 20,
         defend: 100 + 4 * 10,
+      },
+    ],
+  },
+
+  {
+    name: "Thông thạo nước",
+    round: 1,
+    poster: mission4,
+    maxChoose: 3,
+    bots: [
+      {
+        element: 2,
+        level: 10,
+        damage: 100 + 10 * 20,
+        defend: 100 + 10 * 10,
+      },
+    ],
+  },
+
+  {
+    name: "Master",
+    round: 3,
+    poster: mission5,
+    maxChoose: 3,
+    bots: [
+      {
+        element: 3,
+        level: 4,
+        damage: 100 + 3 * 20,
+        defend: 100 + 3 * 10,
+      },
+      {
+        element: 1,
+        level: 5,
+        damage: 100 + 4 * 20,
+        defend: 100 + 4 * 10,
+      },
+      {
+        element: 2,
+        level: 6,
+        damage: 100 + 5 * 20,
+        defend: 100 + 5 * 10,
       },
     ],
   },
@@ -198,6 +243,7 @@ export function AppProvider(props) {
 
   function checkElement(item) {
     let result = {
+      id: parseInt(item.id),
       damage: Number(item.damage),
       defend: Number(item.defend),
       element: Number(item.element),
@@ -206,7 +252,7 @@ export function AppProvider(props) {
       isLock: Number(item.isLock),
       lastMeal: item.name ? item.lastMeal : Number(item.lastMeal) * 1000,
       level: Number(item.level),
-      blood: Number(item.blood),
+      blood: 100,
     };
     switch (result.element) {
       case 1:
@@ -222,15 +268,26 @@ export function AppProvider(props) {
         break;
 
       case 2:
-        result = {
-          ...result,
-          name: "Water Turtle",
-          avatar: waterAvatar,
-          icon: waterIcon,
-          avatarFight: waterAvatarFight,
-          reverse: false,
-          class: "blue",
-        };
+        result =
+          result.level < 10
+            ? {
+                ...result,
+                name: "Water Turtle",
+                avatar: waterAvatar,
+                icon: waterIcon,
+                avatarFight: waterAvatarFight,
+                reverse: false,
+                class: "blue",
+              }
+            : {
+                ...result,
+                name: "Water Turtle",
+                avatar: waterAvatar,
+                icon: waterIcon,
+                avatarFight: waterAvatarFight2,
+                reverse: true,
+                class: "blue",
+              };
         break;
 
       case 3:

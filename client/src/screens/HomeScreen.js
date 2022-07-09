@@ -14,7 +14,7 @@ function HomeScreen(props) {
         className="poster d-flex justify-content-center align-items-center"
         style={{
           width: "100%",
-          minHeight: "300px",
+          minHeight: "500px",
         }}
       >
         <div className="place-holder"></div>

@@ -6,6 +6,7 @@ import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 contract Token is ERC721, Ownable {
     struct Pet {
+        uint256 id;
         uint8 element;
         uint256 damage;
         uint256 defend;
@@ -36,6 +37,7 @@ contract Token is ERC721, Ownable {
         _safeMint(msg.sender, nextId);
 
         _tokenDetails[nextId] = Pet(
+            nextId,
             element,
             damage,
             defend,
@@ -69,6 +71,7 @@ contract Token is ERC721, Ownable {
         Pet storage pet = _tokenDetails[tokenId];
         require(pet.isLock == 1);
         pet.isLock = 0;
+        pet.lastMeal = block.timestamp;
     }
 
     function receiveExperience(uint256 tokenId, uint256 exp) public {
